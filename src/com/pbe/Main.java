@@ -1,5 +1,7 @@
 package com.pbe;
 
+import java.lang.annotation.RetentionPolicy;
+
 /** Study on Annotations
  @author Pieter Beernink
  @version 1.0
@@ -13,10 +15,35 @@ package com.pbe;
 // Annotation basics
 // Annotations are a form of metadata and embed supplemental information about a program, without changing the actions of a program.
 // I.e.: annotations have no direct effect on the operation of the annotated code.
-// However, the information can be used various tools during both development and deployment:
+// Put differently: annotations are meta-meta-objects which can be used to describe other meta-objects.
+// Meta-objects are classes, fields and methods.
+// Asking an object for its meta-object is called introspection.
+// Introspection and annotations are a form of reflection and meta-programming.
+//
+// Annotations can be interpreted at development-time by the IDE or the compiler, or at run-time by a framework:
 // - As info the compiler, annotations can be used by the compiler to detect errors or suppress warnings.
 // - As info for compile-time and deployment-time processing, annotations can be processed by software tools to generate code, XML files, etc.
 // - As info for runtime processing, annotations can be examined at runtime.
+//
+// Annotation processing is a very powerful mechanism and can be used in a lot of different ways:
+// - to describe constraints or usage of an element: e.g. @Deprecated, @Override, or @NotNull
+// - to describe the "nature" of an element, e.g. @Entity, @TestCase, @WebService
+// - to describe the behavior of an element: @Statefull, @Transaction
+// - to describe how to process the element: @Column, @XmlElement
+// Annotations describe the element and clarify its meaning.
+//
+// Usage of annotations:
+// - by compiler to detect errors and suppress warnings
+// - by software tools to generate code, xml files, documentation etc., For example, Javadoc use annotations while generating java documentation for your class.
+// - to describe the constraints (Ex: @Null, @NotNull, @Max, @Min, @Email).
+// - to describe type of an element. Ex: @Entity, @Repository, @Service, @Controller, @RestController, @Resource etc.,
+// - to specify the behaviour. Ex: @Transactional, @Stateful
+// - to specify how to process an element. Ex: @Column, @Embeddable, @EmbeddedId
+// - in testing frameworks, to define test cases (@Test), define test suites (@Suite) etc.,
+// - in AOP (Aspect Oriented programming) use annotations (@Before, @After, @Around etc.,)
+// - in ORM tools like Hibernate, Eclipselink use annotations
+//
+// Documentation, Compilation, IDE, Testing frameworks, IoC containers, Serialization, Aspect-oriented programming (AOP), Application servers, Object-relational mapping (ORM), etc.
 //
 // Besides the possibility of defining own annotation types, there are also standard Java annotations available, defined in java.lang or java.lang.annotation packages.
 //
@@ -133,6 +160,18 @@ package com.pbe;
 // This is a feature that enables information about a class to be obtained at run time.
 // T.B.D.
 
+// AnnotatedElement interface
+// The AnnotatedElement interface is defined in java.lang.reflect and supports reflection for annotations.
+// It's -among others- implemented by the classes Method, Field, Constructor, Class and Package.
+// It defines several methods such as:
+// - getAnnotation()
+// - getAnnotations() - to obtain an array of all annotations associated with an item (class, method, constructor, field, ..) [note: needs to apply RUNTIME retention]
+// - getDeclaredAnnotations() - returns all non-inherited annotations present in the invoking object
+// - isAnnotationPresent() - returns true if the annotation specified is associated with the invoking object
+
+// Using default values
+// Annotation members can be given default values that will be used if no value is specified when the annotation is applied.
+
 // Notes:
 // Annotations can't be extended, but automatically extend the Annotation interface (java.lang.annotation package)
 // This makes Annotation a super-interface of all annotations.
@@ -187,6 +226,13 @@ public class Main {
 //    @interface MyAnnotation { // the @ tells the compiler an annotation type is being declared
 //        String input();
 //        int num();
+//    }
+
+    // Example of using default value with annotation
+//    @Retention (RetentionPolicy.RUNTIME)
+//    @interface MyAnnotation {
+//        String userinput() default "Default user input";
+//        int num() default 99;
 //    }
 
 }
