@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 @Retention(RetentionPolicy.RUNTIME)
 @interface MySingle {
-    int value(); // this variable must be value !!
+    int value(); // this variable must be 'value' (whenever using a single-member annotation)!
 }
 
 // Example of annotation with a single member.

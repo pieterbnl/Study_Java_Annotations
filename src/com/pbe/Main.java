@@ -111,39 +111,56 @@ import java.lang.annotation.RetentionPolicy;
 // // Annotation element definitions
 // }
 
-// Predefined annotation types
-// The Java API has a predefined set of annotation types defined in java.lang:
-// 1. @Deprecated - indicates that the marked element should not longer be used, which will have the compiler generate a warning whenever the annotated code is used.
-// 2. @Override - informs the compiler that the element is meant to override an element declared in the superclass.
+// Predefined/build-in annotation types
+// The Java API has a predefined set of annotation types defined in java.lang.
+// Most are specialized, but nine are general purpose.
+// Of these, four are imported from java.lang.annotation: @Retention, @Documented, @Target, @Inherited
+// And five are are included in java.lang: @Override, @Deprecated, @FunctionalInterface, @SafeVarargs, @SuppressWarnings
+// 1. @Deprecated - indicates that the marked element should not longer be used (and allows to specify from which Java version), which will have the compiler generate a warning whenever the annotated code is used.
+// 2. @Override - informs the compiler that the element is meant to override an element declared in the superclass. Can only be used on methods.
 //    Using this annotation when overriding is not mandatory, but helps clarify. Also, if a method marked @Override fails to correctly override a method, the compiler generates an error.
 // 3. @SuppressWarnings - tells the compiler to suppress specific warnings that it would otherwise generate.
 //    Note that Java lists two categories of warnings: deprecation and unchecked. To suppress both categories use the syntax: @SuppressWarnings({"unchecked", "deprecation"})
-// 4. @SafeVarargs - when applied to a method or constructor, asserts that the code does not perform potentially unsafe operations on its varargs parameter. Unchecked warnings related to varargs usage are suppressed.
-// 5. @FunctionalInterface - indicates that the type declaration is intended to be a functional interface
+// 4. @SafeVarargs - a marker annotation that can be applied methods and constructors; asserts that the code does not perform potentially unsafe operations on its varargs parameter.
+//    Unchecked warnings related to varargs usage are suppressed. Methods must be static, final or private.
+// 5. @FunctionalInterface - designed for use on interfaces, indicates that the annotated interface is a functional interface (= an interface that contains only one abstract method; they are used in lambda expressions)
+//    Note that it's not mandatory to use @FunctionalInterface. Any interface with only one extract method is by definition a functional interface. Like @Override, @FunctionalInterface is mostly informative.
 
 // Annotations that apply to other annotations
 //  Annotations that apply to other annotations are called meta-annotations. There are several meta-annotation types defined in java.lang.annotation:
-// 1. @Retention - specifies how the marked annotation is stored. See retentionpolicy for more info.
-// 2. @Documented - indicates that whenever the specified annotation is used those elements should be documented using the Javadoc tool
-// 3. @Target - marks another annotation to restrict what kind of Java elements the annotation can be applied to
-// 4. @Inherited - indicates that the annotation type can be inherited from the super class (not true by default)
+// 1. @Retention - specifies how the marked annotation is stored. See retention policy for more info. I.e. @Retention is designed to be used only as an annotation to another annotation.
+// 2. @Documented - is a marker interface that indicates that an annotation is to be documented using the Javadoc tool. Designed to be used as an annotation to an annotation declaration.
+// 3. @Target - marks another annotation to restrict what kind of Java elements the annotation can be applied to (which is to be specified in an array of constants that @Target takes as argument)
+// 4. @Inherited - indicates that the annotation type can be inherited from the super class (not true by default) and causes the annotation to be inherited by a subclass. Can only be used on another annotation declaration.
 // 5. @Repeatable - indicates that the marked annotation can be applied more than once to the same declaration or type use. For more info see repeating annotations.
+// 6. @Native - annotates a field that can be accessed by native code
 
 // Type Annotations and Pluggable Type Systems
 // As of the Java SE 8 release, annotations can also be applied to any type use.
-// This means that annotations can be used anywhere you use a type. For example class instance creation expressions (new), casts, implements clauses and throws clauses.
-// Type annotations are supposed to support stronger type checking.
-// JDK does not provide a type checking framework, but it does allow to write or use a third party plugin.
+// This means that annotations can be used anywhere you use a type.
+// For example you can annotate the return type of a method, the type of this within a method, a cast, array levels,
+// an inherited class, class instance creation expressions (new), casts, implements clauses and throws clauses.
+// It's also possible to annotate generic types, including generic type parameter bounds an generic type arguments.
+//
+// Type annotations are supposed to support stronger type checking. They enable tools to perform additional checks on code to prevent errors.
+// JDK does not provide a type checking framework by itself, but it does allow to write or use a third party plugin.
 // For example, to ensure that a particular variable in a program is never assigned to null and avoid triggering a NullPointerException, a plug-in to check for this could be written.
 // The particular variable could be annotated, indicating that it is never to be assigned to null. For example: @NonNull String str;
 // The compiler could then print a warning if it detects a potential problem, allowing the code to be modified to avoid the error.
+//
+// A type annotation must include ElementType.TYPE_USE as a target (note: valid annotation targets are specified using @Target as annotation)
+// For example to annotate a NullPointerException in throws clause:
+// void myMethod() throws @TypeAnnotation NullPointerException { // ...
+
 
 // Repeating annotations
 // There are some situations where you want to apply the same annotation to a declaration or type use.
-// This can be done with 'repeating annotations'. For example:
-// @Schedule(dayOfMonth="last")
-// @Schedule(dayOfWeek="Fri", hour="23")
-// public void doPeriodicCleanup() { ... }
+// This can be done with 'repeating annotations'.
+// For an annotation to be repeatable, it must be annotated with @Repeatable, defined in java.lang.annotation.
+// Its value field specifies the 'container' type for the repeatable annotation.
+// The container is specified as an annotation for which the value field is an array of the repeatable annotation type.
+// I.e.: to create a repeatable annotation, 1) a container annotation must be created and 2) have the annotation type specified as an argument to the @Repeatable annotation
+// See repeated annotation example.
 
 // Specifying a retention policy
 // A retention policy -specified by Java's build-in annotation @Retention(retention-policy)- determines at what point an annotation is discarded.

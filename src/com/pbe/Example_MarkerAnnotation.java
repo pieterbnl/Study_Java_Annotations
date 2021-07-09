@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 @Retention(RetentionPolicy.RUNTIME)
 @interface myMarker { } // creating the (completely empty) myMarker annotation that will be used as a marker
 
+
 // Example of the use of a marker annotation
 // A marker annotation is a special kind of annotation that contains no members.
 // It's sole purpose is to mark an item
