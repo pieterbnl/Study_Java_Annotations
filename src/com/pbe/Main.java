@@ -171,6 +171,19 @@ import java.lang.annotation.RetentionPolicy;
 
 // Using default values
 // Annotation members can be given default values that will be used if no value is specified when the annotation is applied.
+// It's possible to specify none, or one or more values if desired. If no values are specified, the default values will be used.
+// See the added Default_Values examples.
+
+// Marker annotations
+// A marker annotation is a special kind of annotation that contains no members.
+// It's sole purpose is to mark an item, making it's presence as an annotation sufficient.
+// The isAnnotationPresent() method can be used to determine if a marker annotation is present.
+
+// Single member annotations
+// A single member annotation contains only one member.
+// It works like any annotation, but allows a shorthand form of specifying the value of the member.
+// The value for the single member can be specified when the annotation is applied.
+// In order to use the shorthand, the name of the member must be value!
 
 // Notes:
 // Annotations can't be extended, but automatically extend the Annotation interface (java.lang.annotation package)
